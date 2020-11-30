@@ -1,0 +1,9 @@
+credentials/
+terraform.tfvars
+.terraform/
+.terraform.tfstate*
+terraform.tfstate*
+functions/*/code.zip
+consul/gcp/web.zip
+certs/
+.vscode/

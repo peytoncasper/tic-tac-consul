@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+    <title>Saying Hello</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/all.css') }}">
+    <meta http-equiv="refresh" content="5; URL=http://localhost">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+</head>
+<body style="margin: 0px; display: flex; width: 100vw; height: 100vh;  flex-direction: column">
+
+<div style="display: flex; flex-direction: row; margin-left: 10px; margin-top: 10px">
+    <i class="fas fa-gamepad" style="font-size:24px; color: #9E2159; margin: 5px"></i>
+    <div style="color: #4D4D4D; font-size: 24px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal">
+        Tic-Tac-Consul
+    </div>
+</div>
+<div style="display: flex; align-items: center; justify-content: center;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-left: 10px; margin-top: 10px; width: 185px; height: 110px; border-radius: 7px; background-color: #EEEEEE">
+        <div style="color: #4D4D4D; font-size: 18px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal; margin-bottom: 5px">
+            Coordinator
+        </div>
+        <i class="fab fa-google" style="font-size:24px; color: #5E5E5E; margin: 5px"></i>
+        <div style="color: #000000; font-size: 14px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal">
+            (Google Cloud Function)
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: center; height: 100%">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 150px; width: 185px; height: 110px; border-radius: 7px; background-color: #EEEEEE">
+        <div style="color: #000000; font-size: 18px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal; margin-bottom: 5px">
+            Player 1
+        </div>
+        <i class="fab fa-aws" style="font-size:24px; color: #5E5E5E; margin: 5px"></i>
+        <div style="color: #000000; font-size: 14px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal">
+            (AWS Lambda)
+        </div>
+    </div>
+    <div id="board" style="width: 500px; height: 500px; display: flex; flex-direction: column; margin: 0px;">
+        {% for row in board %}
+
+            {% if loop.index == 1 %}
+                <div style="display: flex; height: 100%; border-bottom: 5px solid black">
+            {% elif loop.index == 3 %}
+                <div style="display: flex; height: 100%; border-top: 5px solid black">
+            {% else %}
+                <div style="display: flex; height: 100%;">
+            {% endif %}
+
+            {% for pos in row %}
+                {% if loop.index == 1 %}
+                    <div style="display: flex; width: 100%; align-items: center; justify-content: center; border-right: 5px solid black">
+                {% elif loop.index == 3 %}
+                    <div style="display: flex; width: 100%; align-items: center; justify-content: center; border-left: 5px solid black">
+                {% else %}
+                    <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
+                {% endif %}
+
+
+            {% if pos == 1 %}
+                <i class="fas fa-times" style="font-size:100px; color: black"></i>
+            {% elif pos == 2 %}
+                <div style="width: 50px; height: 50px; background: white; border-radius: 50%; border: 20px solid #C01E6B"></div>
+            {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-left: 150px; width: 185px; height: 110px; border-radius: 7px; background-color: #EEEEEE">
+            <div style="color: #4D4D4D; font-size: 18px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal; margin-bottom: 5px">
+                Player 2
+            </div>
+            <i class="fab fa-microsoft" style="font-size:24px; color: #5E5E5E; margin: 5px"></i>
+            <div style="color: #000000; font-size: 14px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal">
+                (Azure Function)
+            </div>
+        </div>
+        </div>
+
+        <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; width: 100%" >
+            <div style="color: #4D4D4D; font-size: 24px; margin-top: 3px; font-family: 'Roboto', sans-serif; font-weight: bold; font-style: normal; margin-bottom: 5px; height: 35px">
+                {% if winner != "" %}
+                    {% if winner != "New Game" %}
+                        {{ winner }} Wins!
+                    {% elif winner == "Tie" %}
+                        Tie!
+                    {% endif %}
+
+                    <button onclick="startGame()" >Start Game</button>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <div style="display: flex; flex-direction: row; justify-content: flex-end; width: 100%" >
+            <i class="fab fa-github" style="font-size:36px; color: black; margin: 15px"></i>
+        </div>
+
+        <script type="text/javascript">
+            function startGame() {
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('get', '/start', true);
+                xhr.send();
+            }
+        </script>
+</body>
