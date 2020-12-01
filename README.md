@@ -1,7 +1,7 @@
 <h1 align="center">Tic-Tac-Consul</h1>
 
 <p align="center">
-    <img align="center" src="docs/tic-tac-consul.gif" alt="example"/>
+    <img align="center" src="docs/tic-tac-consul.png" alt="Screenshot of the Tic Tac Consul Web UI"/>
 </p>
 
 # What is this and Why?
