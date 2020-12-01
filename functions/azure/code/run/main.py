@@ -1,5 +1,5 @@
 import json
-import os
+import os, time
 from random import randrange
 import azure.functions as func
 
@@ -9,6 +9,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     board = data["board"]
 
     move = calculate_next_step(board)
+
+    time.sleep(4)
 
     return func.HttpResponse(
             json.dumps(move),

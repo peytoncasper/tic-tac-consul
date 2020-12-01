@@ -1,5 +1,5 @@
 import json
-import os
+import os, time
 from random import randrange
 from flask import jsonify
 from flask import request
@@ -10,6 +10,8 @@ def run(req):
     id = os.getenv("ID")
 
     data = json.loads(req.data)
+
+    consul_url = data["consul_url"]
 
     is_coordinator = bool(data["is_coordinator"])
 
@@ -32,30 +34,31 @@ def run(req):
             winner = is_game_over(board)
 
             if winner != "":
-                print("Starting New Game")
+                # print("Starting New Game")
 
-                save(board, winner)
-                time.sleep(20)
+                save(board, winner, consul_url)
+                # time.sleep(20)
 
-                player_one = data["player_one"]
-                player_two = data["player_two"]
+                # player_one = data["player_one"]
+                # player_two = data["player_two"]
 
-                board = [
-                    [0, 0, 0],
-                    [0, 0, 0],
-                    [0, 0, 0]
-                ]
+                # board = [
+                #     [0, 0, 0],
+                #     [0, 0, 0],
+                #     [0, 0, 0]
+                # ]
 
-                session = FuturesSession()
-                session.post(data["players"][id]["url"], json={
-                    "is_coordinator": True,
-                    "board": board,
-                    "next_player": "0",
-                    "new_game": False,
-                    "player_one": player_one,
-                    "player_two": player_two,
-                    "players": data["players"]
-                }, headers=data["players"][id]["headers"])
+                # session = FuturesSession()
+                # session.post(data["players"][id]["url"], json={
+                #     "consul_url": consul_url,
+                #     "is_coordinator": True,
+                #     "board": board,
+                #     "next_player": "0",
+                #     "new_game": False,
+                #     "player_one": player_one,
+                #     "player_two": player_two,
+                #     "players": data["players"]
+                # }, headers=data["players"][id]["headers"])
 
 
 
@@ -95,7 +98,7 @@ def run(req):
                 # if int(next_player) == id:
                 #     next_player = str(int(next_player) + 1)
 
-                save(board, winner)
+                save(board, winner, consul_url)
 
                 print("Board Saved.")
 
@@ -103,6 +106,7 @@ def run(req):
 
                 session = FuturesSession()
                 session.post(data["players"][id]["url"], json={
+                    "consul_url": consul_url,
                     "is_coordinator": True,
                     "board": board,
                     "next_player": next_player,
@@ -185,24 +189,30 @@ def get_player_move(board, player):
 
     print(player)
 
+    errors = 0
+
+    while errors < 5:
+        session = FuturesSession()
+        resp = session.post(player["url"], json={
+            "board": board,
+            "is_coordinator": False,
+        }, headers=player["headers"]).result()
+
+        if resp.content == "Internal Server Error":
+            time.sleep(5)
+        else:
+            print(resp.json())
+            data = resp.json()
+
+            if type(data) is str:
+                return json.loads(data)
+            else:
+                return data
+
+
+def save(board, winner, url):
     session = FuturesSession()
-    resp = session.post(player["url"], json={
-        "board": board,
-        "is_coordinator": False,
-    }, headers=player["headers"]).result()
-
-    print(resp.json())
-
-    data = resp.json()
-    if type(data) is str:
-        return json.loads(data)
-    else:
-        return data
-
-
-def save(board, winner):
-    session = FuturesSession()
-    resp = session.put("http://34.75.188.226:8500/v1/kv/board", json={
+    resp = session.put(url, json={
         "board": board,
         "winner": winner
     }).result()

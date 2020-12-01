@@ -35,6 +35,10 @@ resource "google_cloudfunctions_function" "function" {
   vpc_connector_egress_settings = "PRIVATE_RANGES_ONLY"
 
   ingress_settings = "ALLOW_INTERNAL_ONLY"
+
+  environment_variables = {
+    ID = "2"
+  }
 }
 
 resource "google_cloudfunctions_function_iam_member" "invoker" {

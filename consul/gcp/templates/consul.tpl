@@ -192,30 +192,32 @@ consul config write /etc/consul.d/config/gcp-function-resolver.hcl
 # Setup Web Interface
 ###
 
-export INGRESS_GATEWAY_IP=$(gcloud compute instances describe gcp-consul-client-0 --zone=us-east1-c --format='get(networkInterfaces[0].networkIP)')
+export INGRESS_GATEWAY_IP=$(gcloud compute instances describe gcp-consul-client-1 --zone=us-east1-c --format='get(networkInterfaces[0].networkIP)')
 
 sudo tee -a /tmp/players.json > /dev/null <<EOT
 {
-  "0": {
-      "url": "http://$INGRESS_GATEWAY_IP:8080/api/run",
-      "headers": {
-          "Host": "${azure_function_domain}"
-      }
-  },
-  "1": {
-      "url": "http://$INGRESS_GATEWAY_IP:8080/dev/run",
-      "headers": {
-          "Host": "${aws_function_domain}"
-      }
-  },
-  "2": {
-      "url": "http://$INGRESS_GATEWAY_IP:8080/tic-tac-consul-function/run",
-      "headers": {
-          "Host": "${gcp_function_domain}"
+  "consul_url": "http://$PUBLIC_IP:8500/v1/kv/board",
+  "players": {
+      "0": {
+          "url": "http://$INGRESS_GATEWAY_IP:8080/api/run",
+          "headers": {
+              "Host": "${azure_function_domain}"
+          }
+      },
+      "1": {
+          "url": "http://$INGRESS_GATEWAY_IP:8080/dev/run",
+          "headers": {
+              "Host": "${aws_function_domain}"
+          }
+      },
+      "2": {
+          "url": "http://$INGRESS_GATEWAY_IP:8080/tic-tac-consul-function/run",
+          "headers": {
+              "Host": "${gcp_function_domain}"
+          }
       }
   }
 }
-
 EOT
 
 sudo apt-get install -y python-pip

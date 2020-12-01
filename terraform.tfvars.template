@@ -1,0 +1,5 @@
+aws_access_key=""
+aws_secret_key=""
+aws_account_id=""
+gcp_project_id=""
+gcp_credentials_path=""

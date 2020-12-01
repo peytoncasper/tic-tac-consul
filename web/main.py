@@ -6,7 +6,7 @@ import base64
 from flask import Flask
 app = Flask(__name__)
 
-players = {}
+config = {}
 
 @app.route('/')
 def web():
@@ -30,30 +30,24 @@ def web():
 
 @app.route('/start')
 def start_game():
-    r = requests.put('http://consul.service.consul:8500/v1/kv/board', data = json.dumps({'board':[[0,0,0],[0,0,0],[0,0,0]], "winner": ""}))
-    
-
-
-
-    session.post(data["players"][id]["url"], json={
+    requests.post(config["players"]["2"]["url"], json={
+        "consul_url": config["consul_url"],
         "is_coordinator": True,
         "board": [[0,0,0],[0,0,0],[0,0,0]],
         "next_player": "0",
         "new_game": False,
         "player_one": "0",
         "player_two": "1",
-        "players": players
-    }, headers=players["2"]["headers"])
+        "players": config["players"]
+    }, headers=config["players"]["2"]["headers"])
 
 
     return "Success"
 
 
 if __name__ == '__main__':
-    global players
-
     with open('/tmp/players.json') as json_file:
-        players = json.load(json_file)
+        config = json.load(json_file)
 
 
     app.run(debug=True, port=80, host="0.0.0.0")

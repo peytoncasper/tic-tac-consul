@@ -118,7 +118,13 @@ sudo service consul start
 
 echo "Consul Started."
 
-sleep 15
+# Wait for Consul to Start
+until $(curl --output /dev/null --silent --head --fail http://localhost:8500); do
+    printf '.'
+    sleep 5
+done
+
+sleep 360
 
 export PRIVATE_IP=$(ifconfig | grep -A7 --no-group-separator '^eth' | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*')
 export PUBLIC_IP=$(curl https://ipinfo.io/ip)
@@ -129,7 +135,6 @@ sudo service systemd-resolved restart
 
 sudo iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
 sudo iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
-
 
 if [[ "${client_type}" == "ingress" ]]
 then
@@ -156,12 +161,12 @@ Listeners = [
 }
 ]
 EOT
+
+sleep 10
+
 consul config write /etc/consul.d/config/azure-function-ingress.hcl
 
-sudo rm /tmp/ingress.log
-sudo touch /tmp/ingress.log
-
-sudo nohup consul connect envoy -gateway=ingress -register -service azure-ingress-gateway -admin-bind "127.0.0.1:19200" -address "$PRIVATE_IP:19201" > /tmp/ingress.log &
+sudo nohup consul connect envoy -gateway=ingress -register -service azure-ingress-gateway -admin-bind "127.0.0.1:19200" -address "$PRIVATE_IP:19201" &
 else
 sudo tee -a /etc/consul.d/config/azure-function-terminating.json > /dev/null <<EOT
 {
@@ -199,11 +204,10 @@ Services = [
 ]
 EOT
 
+sleep 10
+
 curl --request PUT --data @/etc/consul.d/config/azure-function-terminating.json localhost:8500/v1/catalog/register
 consul config write /etc/consul.d/config/azure-terminating-gateway.hcl
 
-sudo rm /tmp/terminating.log
-sudo touch /tmp/terminating.log
-
-sudo nohup consul connect envoy -gateway=terminating -register -service azure-terminating-gateway -admin-bind "127.0.0.1:19200" -address "$PRIVATE_IP:19201" > /tmp/terminating.log &
+sudo nohup consul connect envoy -gateway=terminating -register -service azure-terminating-gateway -admin-bind "127.0.0.1:19200" -address "$PRIVATE_IP:19201" &
 fi

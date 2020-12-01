@@ -200,7 +200,20 @@ resource "aws_lambda_permission" "allow_api_gateway" {
 }
 
 resource "aws_api_gateway_deployment" "function" {
-  depends_on  = [aws_api_gateway_integration.function]
+  depends_on  = [
+    aws_api_gateway_integration.function,
+    aws_lambda_permission.allow_api_gateway,
+    aws_api_gateway_integration_response.function,
+    aws_api_gateway_method_response.function,
+    aws_api_gateway_integration.function,
+    aws_api_gateway_method.function,
+    aws_api_gateway_resource.function,
+    aws_api_gateway_rest_api.function,
+  ]
   rest_api_id = aws_api_gateway_rest_api.function.id
   stage_name  = "dev"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
