@@ -30,7 +30,7 @@ resource "google_compute_instance" "consul" {
   metadata_startup_script = templatefile(
     "${path.module}/templates/consul.tpl",
     {
-      consul_version = "1.8.4",
+      consul_version = "1.9.0",
       bootstrap_ip = var.bootstrap_ip
       enable_consul_server = true,
       datacenter = "gcp",
@@ -129,7 +129,7 @@ resource "google_compute_instance" "consul_client_0" {
     "${path.module}/templates/consul_client.tpl",
     {
       id = "0"
-      consul_version = "1.8.4",
+      consul_version = "1.9.0",
       enable_consul_server = false,
       datacenter = "gcp",
       node_name = "client-0",
@@ -220,7 +220,7 @@ resource "google_compute_instance" "consul_client_1" {
     "${path.module}/templates/consul_client.tpl",
     {
       id = "1"
-      consul_version = "1.8.4",
+      consul_version = "1.9.0",
       enable_consul_server = false,
       datacenter = "gcp",
       node_name = "client-1",

@@ -121,7 +121,7 @@ resource "azurerm_linux_virtual_machine" "consul" {
   custom_data = base64encode(templatefile(
       "${path.module}/templates/consul.tpl",
       {
-        consul_version = "1.8.4",
+        consul_version = "1.9.0",
         enable_consul_server = true,
         datacenter = "azure",
         node_name = "server-0",
@@ -240,7 +240,7 @@ resource "azurerm_linux_virtual_machine" "consul_client_0" {
       "${path.module}/templates/consul_client.tpl",
       {
         id = "0"
-        consul_version = "1.8.4",
+        consul_version = "1.9.0",
         enable_consul_server = false,
         datacenter = "azure",
         node_name = "client-0",
@@ -365,7 +365,7 @@ resource "azurerm_linux_virtual_machine" "consul_client_1" {
       "${path.module}/templates/consul_client.tpl",
       {
         id = "1"
-        consul_version = "1.8.4",
+        consul_version = "1.9.0",
         enable_consul_server = false,
         datacenter = "azure",
         node_name = "client-1",

@@ -40,7 +40,7 @@ Description="HashiCorp Consul - A service mesh solution"
 Documentation=https://www.consul.io/
 Requires=network-online.target
 After=network-online.target
-ConditionFileNotEmpty=/etc/consul.d/consul.hcl
+ConditionFileNotEmpty=/etc/consul.d/consul.json
 
 [Service]
 Type=exec
@@ -118,7 +118,7 @@ echo "Consul Started."
 
 
 # Wait for Consul to Start
-until $(curl --output /dev/null --silent --head --fail http://localhost:8500); do
+until $(curl --output /dev/null --silent --head --fail -d '{"is_coordinator": false, "board": [[0,0,0],[0,0,0],[0,0,0]]' http://localhost:5001/dev/run); do
     printf '.'
     sleep 5
 done

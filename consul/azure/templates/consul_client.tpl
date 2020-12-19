@@ -124,6 +124,8 @@ until $(curl --output /dev/null --silent --head --fail http://localhost:8500); d
     sleep 5
 done
 
+# Wait for the Cluster to finish connecting
+
 sleep 360
 
 export PRIVATE_IP=$(ifconfig | grep -A7 --no-group-separator '^eth' | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*')
