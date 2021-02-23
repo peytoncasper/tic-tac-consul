@@ -8,3 +8,4 @@ consul/gcp/web.zip
 certs/
 .vscode/
 .DS_Store
+creds/
