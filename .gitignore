@@ -7,3 +7,4 @@ functions/*/code.zip
 consul/gcp/web.zip
 certs/
 .vscode/
+.DS_Store

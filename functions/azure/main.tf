@@ -64,6 +64,7 @@ resource "azurerm_function_app" "function" {
         virtual_network_subnet_id = data.azurerm_subnet.consul.id
         action = "Allow"
         priority = 100
+        "service_tag" = null
       }]
     }
 

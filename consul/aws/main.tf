@@ -53,7 +53,7 @@ resource "aws_instance" "consul" {
   user_data = templatefile(
     "${path.module}/templates/consul.tpl",
     {
-      consul_version = "1.9.0",
+      consul_version = "1.8.8",
       enable_consul_server = true,
       bootstrap_ip = var.bootstrap_ip,
       datacenter = "aws",
@@ -140,7 +140,7 @@ resource "aws_instance" "consul_client_0" {
     "${path.module}/templates/consul_client.tpl",
     {
       id = "0"
-      consul_version = "1.9.0",
+      consul_version = "1.8.8",
       enable_consul_server = false,
       datacenter = "aws",
       node_name = "client-0",
@@ -230,7 +230,7 @@ resource "aws_instance" "consul_client_1" {
     "${path.module}/templates/consul_client.tpl",
     {
       id = "1"
-      consul_version = "1.9.0",
+      consul_version = "1.8.8",
       enable_consul_server = false,
       datacenter = "aws",
       node_name = "client-1",

@@ -158,7 +158,11 @@ sudo service consul start
 
 echo "Consul Started."
 
-sleep 15
+# Wait for Consul to Start
+until $(curl --output /dev/null --silent --head --fail http://localhost:8500); do
+    printf '.'
+    sleep 5
+done
 
 export PRIVATE_IP=$(ifconfig | grep -A7 --no-group-separator '^ens' | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*')
 export PUBLIC_IP=$(curl https://ipinfo.io/ip)

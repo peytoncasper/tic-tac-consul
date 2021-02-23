@@ -59,8 +59,7 @@ EOT
 
 sudo mkdir --parents /etc/consul.d
 sudo touch /etc/consul.d/consul.hcl
-sudo chown --recursive consul:consul /etc/consul.d
-sudo chmod 640 /etc/consul.d/consul.hcl
+
 
 sudo mkdir --parents /etc/consul.d/config
 
@@ -155,12 +154,19 @@ Redirect {
 }
 EOT
 
+sudo chown --recursive consul:consul /etc/consul.d
+sudo chmod 640 /etc/consul.d/consul.hcl
+
 sudo service consul enable
 sudo service consul start
 
 echo "Consul Started."
 
-sleep 15
+# Wait for Consul to Start
+until $(curl --output /dev/null --silent --head --fail http://localhost:8500); do
+    printf '.'
+    sleep 5
+done
 
 export PRIVATE_IP=$(ifconfig | grep -A7 --no-group-separator '^ens' | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*')
 export PUBLIC_IP=$(curl https://ipinfo.io/ip)
