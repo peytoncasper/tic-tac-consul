@@ -147,6 +147,7 @@ EOT
 sudo tee -a /etc/consul.d/config/gcp-function-resolver.hcl > /dev/null <<EOT
 Kind = "service-resolver"
 Name = "gcp-function"
+ConnectTimeout = "30s"
 
 Redirect {
   Service    = "gcp-function"

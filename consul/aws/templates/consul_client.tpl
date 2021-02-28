@@ -175,7 +175,7 @@ else
 sudo tee -a /etc/consul.d/config/aws-function-terminating.json > /dev/null <<EOT
 {
   "Node": "aws_function_node",
-  "Address": "localhost",
+  "Address": "${aws_function_domain}",
   "NodeMeta": {
     "external-node": "true",
     "external-probe": "true"
@@ -183,7 +183,7 @@ sudo tee -a /etc/consul.d/config/aws-function-terminating.json > /dev/null <<EOT
   "Service": {
     "ID": "aws-function-id",
     "Service": "aws-function",
-    "Port": 5001
+    "Port": 443
   }, 
   "Checks": [
     {
@@ -204,6 +204,7 @@ Name = "aws-terminating-gateway"
 Services = [
 {
   Name = "aws-function"
+  CAFile = "/etc/ssl/certs/ca-certificates.crt"
 }
 ]
 EOT
@@ -214,43 +215,5 @@ curl --request PUT --data @/etc/consul.d/config/aws-function-terminating.json lo
 consul config write /etc/consul.d/config/aws-terminating-gateway.hcl
 
 sudo nohup consul connect envoy -gateway=terminating -register -service aws-terminating-gateway -admin-bind "127.0.0.1:19200" -address "$PRIVATE_IP:19201" &
-
-###
-# Setup Proxy
-###
-
-sudo apt-get install -y python-pip 
-
-pip install flask
-pip install requests
-
-sudo tee -a /tmp/proxy.py > /dev/null <<EOT
-import json
-import os, requests
-from random import randrange
-from flask import render_template, request
-import base64
-from flask import Flask
-import sys
-app = Flask(__name__)
-
-
-@app.route('/dev/run', methods=["POST"])
-def lambda_api():
-    app.logger.info(request.get_json())
-
-    resp = requests.post("https://${aws_function_domain}/dev/run", data=request.data)
-
-    app.logger.info(resp.json())
-
-    return json.dumps(resp.json())
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5001, host="0.0.0.0")
-EOT
-
-
-sudo nohup python /tmp/proxy.py &
 
 fi

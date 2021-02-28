@@ -146,6 +146,7 @@ EOT
 sudo tee -a /etc/consul.d/config/azure-function-resolver.hcl > /dev/null <<EOT
 Kind = "service-resolver"
 Name = "azure-function"
+ConnectTimeout = "30s"
 
 Redirect {
   Service    = "azure-function"

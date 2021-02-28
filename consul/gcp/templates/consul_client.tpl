@@ -181,7 +181,7 @@ sudo tee -a /etc/consul.d/config/gcp-function-terminating.json > /dev/null <<EOT
   "Service": {
     "ID": "gcp-function-id",
     "Service": "gcp-function",
-    "Port": 80
+    "Port": 443
   }, 
   "Checks": [
     {
@@ -202,6 +202,7 @@ Name = "gcp-terminating-gateway"
 Services = [
 {
   Name = "gcp-function"
+  CAFile = "/etc/ssl/certs/ca-certificates.crt"
 }
 ]
 EOT

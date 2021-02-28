@@ -146,6 +146,7 @@ EOT
 sudo tee -a /etc/consul.d/config/aws-function-resolver.hcl > /dev/null <<EOT
 Kind = "service-resolver"
 Name = "aws-function"
+ConnectTimeout = "30s"
 
 Redirect {
   Service    = "aws-function"

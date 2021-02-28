@@ -77,3 +77,10 @@ Run Terraform Apply and let it configure the necessary resources.
 ```
 terraform apply
 ```
+
+
+headers={"Host": "azure-functions-1a06ee242cc9b984.azurewebsites.net"}
+
+import requests
+
+requests.post("http://10.142.0.3:8080/api/run", json={"board":[[0,0,0],[0,0,0],[0,0,0]], "is_coordinator":False}, headers=headers)

@@ -181,7 +181,7 @@ sudo tee -a /etc/consul.d/config/azure-function-terminating.json > /dev/null <<E
   "Service": {
     "ID": "azure-function-id",
     "Service": "azure-function",
-    "Port": 80
+    "Port": 443
   }, 
   "Checks": [
     {
@@ -202,6 +202,7 @@ Name = "azure-terminating-gateway"
 Services = [
 {
   Name = "azure-function"
+  CAFile = "/etc/ssl/certs/ca-certificates.crt"
 }
 ]
 EOT
