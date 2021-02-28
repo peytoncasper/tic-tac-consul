@@ -6,6 +6,8 @@
 
 # What is this and Why?
 
+Tic Tac Consul pits serverless functions from GCP, AWS and Azure in an epic match of Tic Tac Toe! No, but seriously, Tic Tac Consul is focused on exploring the challenges of networking across environments and integrating serverless functions with the rest of your application stack. Specifically, how new features of Consul called Mesh Gateways, Terminating Gateways and Ingress Gateways can be combined to accomplish a few interesting ideas.
+
 
 # Setup
 
