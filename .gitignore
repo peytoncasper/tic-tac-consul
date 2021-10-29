@@ -9,3 +9,4 @@ certs/*
 .vscode/
 .DS_Store
 creds/
+.terraform.lock.hcl
