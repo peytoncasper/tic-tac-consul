@@ -39,7 +39,7 @@ resource "aws_eip_association" "consul" {
 
 resource "aws_instance" "consul" {
   # ami           = data.aws_ami.ubuntu.id
-  ami = "ami-010bb5f550c901adb"
+  ami = "ami-0747bdcabd34c712a"
   instance_type = "t3.small"
 
   associate_public_ip_address = true
@@ -125,7 +125,7 @@ resource "aws_eip_association" "consul_client_0" {
 
 resource "aws_instance" "consul_client_0" {
   # ami           = data.aws_ami.ubuntu.id
-  ami = "ami-010bb5f550c901adb"
+  ami = "ami-0747bdcabd34c712a"
   instance_type = "t3.small"
 
   associate_public_ip_address = true
@@ -215,7 +215,7 @@ resource "aws_eip_association" "consul_client_1" {
 
 resource "aws_instance" "consul_client_1" {
   # ami           = data.aws_ami.ubuntu.id
-  ami = "ami-010bb5f550c901adb"
+  ami = "ami-0747bdcabd34c712a"
   instance_type = "t3.small"
 
   associate_public_ip_address = true

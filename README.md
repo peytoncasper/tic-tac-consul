@@ -72,6 +72,15 @@ gcp_project_id="..."
 gcp_credentials_path="credentials/creds.json"
 ```
 
+4. Enable APIs
+
+```
+Compute Engine API
+Serverless VPC Access API
+Cloud Functions API
+Cloud Build API
+```
+
 ### Azure Credentials
 
 Currently Azure credentials are based off the Azure CLI authentication method. As a result, you simply need to be authenticated with `az`

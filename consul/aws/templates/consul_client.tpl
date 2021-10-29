@@ -7,16 +7,14 @@ sudo apt-get install -y gnupg-agent
 sudo apt-get install -y software-properties-common 
 sudo apt-get install -y unzip
 
-curl -sL 'https://getenvoy.io/gpg' | sudo apt-key add -
+sudo apt update
+sudo apt install apt-transport-https gnupg2 curl lsb-release
+curl -sL 'https://deb.dl.getenvoy.io/public/gpg.8115BA8E629CC074.key' | sudo gpg --dearmor -o /usr/share/keyrings/getenvoy-keyring.gpg
+echo a077cb587a1b622e03aa4bf2f3689de14658a9497a9af2c427bba5f4cc3c4723 /usr/share/keyrings/getenvoy-keyring.gpg | sha256sum --check
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/getenvoy-keyring.gpg] https://deb.dl.getenvoy.io/public/deb/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/getenvoy.list
+sudo apt update
+sudo apt-get install -y getenvoy-envoy=1.14.5.p0.gfa0371e-1p69.ga5345f6
 
-apt-key fingerprint 6FF974DB
-
-sudo add-apt-repository \
-    "deb [arch=amd64] https://dl.bintray.com/tetrate/getenvoy-deb \
-    $(lsb_release -cs) \
-    stable"
-
-sudo apt-get update && sudo apt-get install -y getenvoy-envoy=1.14.4.p0.g923c411-1p67.g2aa564b
 
 
 curl -s -o consul_${consul_version}_linux_amd64.zip "https://releases.hashicorp.com/consul/${consul_version}/consul_${consul_version}_linux_amd64.zip"
