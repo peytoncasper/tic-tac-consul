@@ -5,7 +5,7 @@ terraform.tfvars
 terraform.tfstate*
 functions/*/code.zip
 consul/gcp/web.zip
-certs/
+certs/*
 .vscode/
 .DS_Store
 creds/
