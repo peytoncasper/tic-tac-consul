@@ -65,6 +65,7 @@ resource "azurerm_function_app" "function" {
         action = "Allow"
         priority = 100
         "service_tag" = null
+        headers = null
       }]
     }
 
